@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- region Dialog -->
+
+    <style name="HelloCustomer.Dialog.Animation" parent="">
+        <item name="android:windowEnterAnimation">@anim/anim_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_out</item>
+    </style>
+
+    <style name="HelloCustomer.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowAnimationStyle">@style/HelloCustomer.Dialog.Animation</item>
+    </style>
+
+    <!-- endregion -->
+
+    <!-- region Theme Overlay -->
+
+    <style name="ThemeOverlay.HelloCustomer.Button.TextButton" parent="">
+        <item name="colorPrimary">?attr/colorSecondary</item>
+        <item name="colorOnPrimary">?attr/colorSecondary</item>
+    </style>
+
+    <style name="ThemeOverlay.HelloCustomer.Button" parent="">
+        <item name="colorPrimary">?attr/colorSecondary</item>
+        <item name="colorOnPrimary">?attr/colorOnSecondary</item>
+    </style>
+
+    <!-- endregion-->
+
+    <!-- region Shape Appearance -->
+
+    <style name="ShapeAppearance.HelloCustomer.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="ShapeAppearance.HelloCustomer.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="ShapeAppearance.HelloCustomer.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
+    <!-- endregion -->
+
+    <!-- region Button -->
+
+    <style name="Widget.HelloCustomer.Button" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.HelloCustomer.Button</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.HelloCustomer.SmallComponent</item>
+    </style>
+
+    <style name="Widget.HelloCustomer.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.HelloCustomer.Button.TextButton</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Widget.HelloCustomer.Button.TextButton.Icon">
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+    </style>
+
+    <!-- endregion -->
+
+    <style name="Widget.HelloCustomer.Hint" parent="">
+        <item name="android:textSize">@dimen/font_12</item>
+        <item name="android:layout_marginTop">@dimen/size_16</item>
+    </style>
+
+</resources>

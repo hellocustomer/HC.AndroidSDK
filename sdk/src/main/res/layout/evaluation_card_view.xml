@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
+    tools:cardBackgroundColor="@color/white"
+    tools:cardCornerRadius="8dp"
+    tools:cardElevation="0dp"
+    tools:layout_height="wrap_content"
+    tools:layout_width="match_parent"
+    tools:parentTag="androidx.cardview.widget.CardView">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="24dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/closeButton"
+            style="@style/Widget.HelloCustomer.Button.TextButton.Icon"
+            android:layout_width="36dp"
+            android:layout_height="0dp"
+            app:icon="@drawable/ic_close"
+            app:iconTint="@color/black"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/headingTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/evaluationLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/closeButton"
+            tools:text="Simple text" />
+
+        <com.hellocustomer.sdk.evaluation.EvaluationLayout
+            android:id="@+id/evaluationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_16"
+            app:dividerDrawableHorizontal="@drawable/evaluation_button_divider"
+            app:dividerDrawableVertical="@drawable/evaluation_button_divider"
+            app:flexWrap="wrap"
+            app:justifyContent="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headingTextView"
+            app:showDividerHorizontal="middle"
+            app:showDividerVertical="middle">
+
+        </com.hellocustomer.sdk.evaluation.EvaluationLayout>
+
+        <TextView
+            android:id="@+id/leftHint"
+            style="@style/Widget.HelloCustomer.Hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/rightHint"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/evaluationLayout"
+            tools:text="0 – Not at all likely" />
+
+        <TextView
+            android:id="@+id/rightHint"
+            style="@style/Widget.HelloCustomer.Hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/leftHint"
+            app:layout_constraintTop_toBottomOf="@id/evaluationLayout"
+            tools:text="10 – Very likely" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</merge>
