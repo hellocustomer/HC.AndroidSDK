@@ -22,7 +22,10 @@ internal object TouchpointMapper {
             leftHint = language.leftHint,
             paragraphColor = dto.paragraphColor.let(Color::parseColor),
             textColor = dto.textColor.let(Color::parseColor),
-            surveyUrl = dto.surveyURL
+            surveyUrl = dto.surveyURL,
+            paragraphFontName = dto.paragraphFontName,
+            textFontName = dto.textFontName,
+            touchpointId = dto.touchpointId
         )
     }
 }

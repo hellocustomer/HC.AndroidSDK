@@ -2,8 +2,6 @@ package com.hellocustomer.sdk.logger
 
 import android.util.Log
 
-internal val SdkLogger = DefaultLogger(tag = "GLOBAL")
-
 internal fun Any.defaultLogger(): Logger = DefaultLogger(tag = this.javaClass.simpleName)
 
 internal class DefaultLogger(private val tag: String? = null) : Logger {

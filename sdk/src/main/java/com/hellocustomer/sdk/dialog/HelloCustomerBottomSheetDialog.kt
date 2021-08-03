@@ -54,17 +54,20 @@ internal class HelloCustomerBottomSheetDialog : BottomSheetDialogFragment(), Hel
     override fun show(fragmentManager: FragmentManager): HelloCustomerDialog =
         show(fragmentManager, this::class.java.simpleName)
 
+    override fun dismissDialog(): HelloCustomerDialog = apply {
+        super.dismiss()
+    }
+
     //endregion
 
     private fun setupView(): Unit = with(requireBinding) {
         cardView.bind(config)
         cardView.closeButton.setOnClickListener {
-            dismiss()
+            dismissDialog()
         }
-        cardView.buttonClickListener = View.OnClickListener { button ->
-            require(button is EvaluationButtonView)
+        cardView.buttonClickListener = View.OnClickListener {
             viewModel.onEvaluate(url = config.surveyUrl)
-            dismiss()
+            dismissDialog()
         }
     }
 

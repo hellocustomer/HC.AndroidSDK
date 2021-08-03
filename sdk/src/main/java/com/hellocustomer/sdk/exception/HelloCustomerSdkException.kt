@@ -7,4 +7,6 @@ public open class HelloCustomerSdkException : RuntimeException {
     internal constructor(message: String) : super(message)
 
     internal constructor(message: String, throwable: Throwable) : super(message, throwable)
+
+    internal constructor(throwable: Throwable) : super(throwable)
 }

@@ -1,18 +1,34 @@
 package com.hellocustomer.sdk.network
 
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
+import com.hellocustomer.sdk.exception.HelloCustomerSdkException
 import com.hellocustomer.sdk.network.dto.TouchpointDto
 import java.io.InputStreamReader
 import java.io.Reader
 import java.net.HttpURLConnection
 import java.net.URL
 
-internal class HelloCustomerApiImpl : HelloCustomerApi {
+internal class HelloCustomerApiImpl(
+    private val gson: Gson
+) : HelloCustomerApi {
 
-    override suspend fun getTouchpoint(token: String): TouchpointDto {
-        return call(URL("http://192.168.10.140:8080/workshop/hc"), "GET").map { content ->
-            GSON.fromJson(content, TouchpointDto::class.java)
-        }.getOrThrow()
+    override suspend fun getTouchpoint(token: String): Result<TouchpointDto> =
+        call(URL("http://192.168.10.140:8080/workshop/hc"), "GET")
+            .map { content ->
+                gson.fromJson(content, TouchpointDto::class.java)
+            }
+            .mapError()
+
+    private fun <T> Result<T>.mapError(): Result<T> {
+        return when {
+            isSuccess -> this
+            isFailure -> Result.failure(
+                exception = HelloCustomerSdkException(
+                    throwable = requireNotNull(this.exceptionOrNull())
+                )
+            )
+            else -> throw IllegalStateException("Illegal state of the internal API. Result couldn't be success and failure simultaneously or neither of them.")
+        }
     }
 
     private fun call(url: URL, requestMethod: String): Result<String> = kotlin.runCatching {
@@ -35,10 +51,5 @@ internal class HelloCustomerApiImpl : HelloCustomerApi {
         reader.close()
 
         return@runCatching content
-    }
-
-    companion object {
-
-        private val GSON = GsonBuilder().create()
     }
 }
