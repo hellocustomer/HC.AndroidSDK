@@ -1,21 +1,23 @@
 package com.hellocustomer.sdk.network
 
-import com.google.gson.Gson
 import com.hellocustomer.sdk.exception.HelloCustomerSdkException
 import com.hellocustomer.sdk.network.dto.TouchpointDto
+import com.squareup.moshi.JsonAdapter
 import java.io.InputStreamReader
 import java.io.Reader
 import java.net.HttpURLConnection
 import java.net.URL
 
 internal class HelloCustomerApiImpl(
-    private val gson: Gson
+    private val touchpointAdapter: JsonAdapter<TouchpointDto>
 ) : HelloCustomerApi {
 
     override suspend fun getTouchpoint(token: String): Result<TouchpointDto> =
         call(URL("http://192.168.10.140:8080/workshop/hc"), "GET")
-            .map { content ->
-                gson.fromJson(content, TouchpointDto::class.java)
+            .mapCatching { content ->
+                requireNotNull(touchpointAdapter.fromJson(content)) {
+                    "Required a not-null DTO from JSON mapping."
+                }
             }
             .mapError()
 

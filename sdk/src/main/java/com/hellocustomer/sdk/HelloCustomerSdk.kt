@@ -5,7 +5,7 @@ package com.hellocustomer.sdk
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.google.gson.GsonBuilder
+import com.hellocustomer.sdk.dialog.DialogType
 import com.hellocustomer.sdk.dialog.HelloCustomerBottomSheetDialog
 import com.hellocustomer.sdk.dialog.HelloCustomerDialog
 import com.hellocustomer.sdk.dialog.HelloCustomerDialogImpl
@@ -14,9 +14,9 @@ import com.hellocustomer.sdk.logger.DefaultLogger
 import com.hellocustomer.sdk.mapper.TouchpointMapper
 import com.hellocustomer.sdk.network.HelloCustomerApi
 import com.hellocustomer.sdk.network.HelloCustomerApiImpl
-import com.hellocustomer.sdk.network.dto.DialogTypeDto
 import com.hellocustomer.sdk.network.dto.TouchpointDto
 import com.hellocustomer.sdk.network.dto.TranslationDto
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,10 +29,12 @@ import kotlin.coroutines.CoroutineContext
 @JvmOverloads
 public fun AppCompatActivity.createTouchpoint(
     token: String,
+    dialogType: DialogType = DialogType.CENTER,
     onError: (Throwable) -> Unit = ::handleException,
     onSuccess: (HelloCustomerDialog) -> Unit = {}
 ): Unit = createTouchpoint(
     token = token,
+    dialogType = dialogType,
     fragmentManager = supportFragmentManager,
     onSuccess = onSuccess,
     onError = onError
@@ -41,19 +43,29 @@ public fun AppCompatActivity.createTouchpoint(
 @JvmOverloads
 public fun Fragment.createTouchpoint(
     token: String,
+    dialogType: DialogType = DialogType.CENTER,
     onError: (Throwable) -> Unit = ::handleException,
     onSuccess: (HelloCustomerDialog) -> Unit = {}
 ): Unit = createTouchpoint(
     token = token,
+    dialogType = dialogType,
     fragmentManager = childFragmentManager,
     onSuccess = onSuccess,
     onError = onError
 )
 
+/**
+ * @param token
+ * @param fragmentManager
+ * @param dialogType
+ * @param onError
+ * @param onSuccess
+ */
 @JvmOverloads
 public fun createTouchpoint(
     token: String,
     fragmentManager: FragmentManager,
+    dialogType: DialogType = DialogType.CENTER,
     onError: (Throwable) -> Unit = ::handleException,
     onSuccess: (HelloCustomerDialog) -> Unit = {}
 ): Unit = runBlocking {
@@ -66,9 +78,9 @@ public fun createTouchpoint(
 
                 val config = TouchpointMapper.toConfig(touchpoint, lang)
 
-                val dialog: HelloCustomerDialog = when (touchpoint.dialogType) {
-                    DialogTypeDto.BOTTOM -> HelloCustomerBottomSheetDialog.newInstance(config)
-                    DialogTypeDto.CENTER -> HelloCustomerDialogImpl.newInstance(config)
+                val dialog: HelloCustomerDialog = when (dialogType) {
+                    DialogType.BOTTOM -> HelloCustomerBottomSheetDialog.newInstance(config)
+                    DialogType.CENTER -> HelloCustomerDialogImpl.newInstance(config)
                 }
 
                 dialog.show(fragmentManager)
@@ -82,8 +94,10 @@ public fun createTouchpoint(
 
 //region Internal API
 
+internal val MoshiInstance: Moshi = Moshi.Builder().build()
+
 internal val SdkApi: HelloCustomerApi = HelloCustomerApiImpl(
-    gson = GsonBuilder().create()
+    touchpointAdapter = MoshiInstance.adapter(TouchpointDto::class.java)
 )
 
 internal val SdkLogger = DefaultLogger(tag = "HELLO_CUSTOMER")

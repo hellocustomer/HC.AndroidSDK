@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.hellocustomer.sdk.SdkLogger
 import com.hellocustomer.sdk.databinding.FragmentHelloCustomerBottomSheetBinding
-import com.hellocustomer.sdk.evaluation.EvaluationButtonView
-import com.hellocustomer.sdk.logger.defaultLogger
 import com.hellocustomer.sdk.survey.WebViewActivity
 
 internal class HelloCustomerBottomSheetDialog : BottomSheetDialogFragment(), HelloCustomerDialog {
 
-    private val logger = defaultLogger()
+    private val logger = SdkLogger
     private lateinit var viewModel: HelloCustomerViewModel
 
     private var _binding: FragmentHelloCustomerBottomSheetBinding? = null

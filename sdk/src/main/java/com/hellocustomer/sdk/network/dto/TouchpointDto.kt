@@ -12,7 +12,6 @@ internal data class TouchpointDto (
     val textColor: String,
     val paragraphFontName: String,
     val paragraphColor: String,
-    val dialogType: DialogTypeDto,
     val surveyURL: String
 ) {
 

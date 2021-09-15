@@ -14,7 +14,9 @@ internal interface Logger {
 
     fun v(message: String)
 
-    fun e(throwable: Throwable?, message: String)
+    fun e(throwable: Throwable?, message: String?)
+
+    fun e(throwable: Throwable?)
 
     fun e(message: String)
 }

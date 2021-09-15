@@ -27,10 +27,15 @@ internal class DefaultLogger(private val tag: String? = null) : Logger {
     override fun v(message: String) =
         v(message, null)
 
-    override fun e(throwable: Throwable?, message: String) {
+    override fun e(throwable: Throwable?, message: String?) {
         Log.e(tag, message, throwable)
     }
 
-    override fun e(message: String) =
-        e(null, message)
+    override fun e(throwable: Throwable?) {
+        Log.e(tag, null, throwable)
+    }
+
+    override fun e(message: String) {
+        Log.e(tag, message)
+    }
 }

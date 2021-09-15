@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.hellocustomer.sdk.R
+import com.hellocustomer.sdk.SdkLogger
 import com.hellocustomer.sdk.databinding.FragmentHelloCustomerDialogBinding
 import com.hellocustomer.sdk.logger.defaultLogger
 import com.hellocustomer.sdk.evaluation.EvaluationButtonView
@@ -17,7 +18,7 @@ import com.hellocustomer.sdk.survey.WebViewActivity
 
 internal class HelloCustomerDialogImpl : DialogFragment(), HelloCustomerDialog {
 
-    private val logger = defaultLogger()
+    private val logger = SdkLogger
     private lateinit var viewModel: HelloCustomerViewModel
 
     private var _binding: FragmentHelloCustomerDialogBinding? = null

@@ -1,9 +1,9 @@
 package com.hellocustomer.sdk.network.dto
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 internal enum class QuestionTypeDto {
-    @SerializedName("NPS") NPS,
-    @SerializedName("CES") CES,
-    @SerializedName("CSAT") CSAT
+    @Json(name = "NPS") NPS,
+    @Json(name = "CES") CES,
+    @Json(name = "CSAT") CSAT
 }
