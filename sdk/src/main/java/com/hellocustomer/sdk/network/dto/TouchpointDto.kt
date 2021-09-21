@@ -1,22 +1,20 @@
 package com.hellocustomer.sdk.network.dto
 
+import com.squareup.moshi.Json
 import java.util.Locale
 
-internal data class TouchpointDto (
-    val translations: List<TranslationDto>,
-    val questionType: QuestionTypeDto,
-    val touchpointId: String,
-    val buttonTextColor: String,
-    val buttonBackgroundColor: String,
-    val textFontName: String,
-    val textColor: String,
-    val paragraphFontName: String,
-    val paragraphColor: String,
-    val surveyURL: String
+internal data class TouchpointDto(
+    @Json(name = "campaign_UniqueID") val campaignUniqueID: String,
+    @Json(name = "hasbeenArchived") val hasBeenArchived: Boolean,
+    @Json(name = "sortOrder") val sortOrder: Long,
+    @Json(name = "items") val questions: List<QuestionDto>,
+    @Json(name = "uniqueID") val uniqueID: String
 ) {
 
-    fun findDefaultLanguage(currentLocale: Locale): TranslationDto? =
-        this.translations
-            .find { it.language.equals(currentLocale.language, ignoreCase = true) }
-            ?: this.translations.firstOrNull { it.isDefault }
+    fun findByDefaultLanguage(currentLocale: Locale): QuestionDto? =
+        this.questions.find {
+            it.isFirst && it.languageCulture.equals(currentLocale.language, ignoreCase = true)
+        } ?: this.questions.firstOrNull {
+            it.isFirst && "EN".equals(currentLocale.language, ignoreCase = true)
+        } ?: this.questions.firstOrNull(QuestionDto::isFirst)
 }

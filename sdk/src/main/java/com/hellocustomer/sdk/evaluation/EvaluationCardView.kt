@@ -7,8 +7,8 @@ import androidx.cardview.widget.CardView
 import com.google.android.material.button.MaterialButton
 import com.hellocustomer.sdk.R
 import com.hellocustomer.sdk.databinding.EvaluationCardViewBinding
-import com.hellocustomer.sdk.dialog.HelloCustomerConfig
-import com.hellocustomer.sdk.getCompatColor
+import com.hellocustomer.sdk.dialog.HelloCustomerDialogConfig
+import com.hellocustomer.sdk.utility.getCompatColor
 
 internal class EvaluationCardView : CardView {
 
@@ -31,25 +31,22 @@ internal class EvaluationCardView : CardView {
     val closeButton: MaterialButton
         get() = binding.closeButton
 
-    var buttonClickListener: OnClickListener?
-        get() = binding.evaluationLayout.buttonClickListener
-        set(value) {
-            binding.evaluationLayout.buttonClickListener = value
-        }
+    fun setOnEvaluateClickListener(listener: EvaluationLayout.OnEvaluateClickListener) {
+        binding.evaluationLayout.setOnEvaluateClickListener(listener)
+    }
 
-    fun bind(config: HelloCustomerConfig): Unit = with(binding) {
+    fun bind(config: HelloCustomerDialogConfig): Unit = with(binding) {
         evaluationLayout.generate(config)
-        headingTextView.text = config.title
+        headingTextView.text = config.questionText
         leftHint.text = config.leftHint
         rightHint.text = config.rightHint
 
-        config.paragraphColor
+        config.questionTextColor
             ?.let(headingTextView::setTextColor)
-        config.textColor
+        config.hintTextColor
             ?.let { color ->
                 leftHint.setTextColor(color)
                 rightHint.setTextColor(color)
             }
     }
-
 }

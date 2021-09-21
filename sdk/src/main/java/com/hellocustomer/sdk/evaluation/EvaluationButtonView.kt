@@ -2,9 +2,7 @@ package com.hellocustomer.sdk.evaluation
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.annotation.ColorInt
 import com.google.android.material.button.MaterialButton
-import com.hellocustomer.sdk.R
 
 internal class EvaluationButtonView : MaterialButton {
 

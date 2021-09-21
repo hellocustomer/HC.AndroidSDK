@@ -1,0 +1,68 @@
+/**
+ * All dependencies variable.
+ */
+def deps = [:]
+ext.deps = deps
+
+// Flavor dimension
+ext.envFlavorDimension = "todo"
+
+/**
+ * Version variables.
+ */
+def versions = [:]
+versions.kotlin = "1.5.21"
+deps.versions = versions
+ext.versions = versions
+
+/**
+ * Build variables.
+ */
+def build = [:]
+build.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
+build.google_services_plugin = "com.google.gms:google-services:$versions.google_plugin"
+build.kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+deps.build = build
+
+/**
+ * Build versions variables.
+ */
+def build_version = [:]
+build_version.min_sdk = 21
+build_version.target_sdk = 30
+build_version.compile_sdk = 30
+deps.build_version = build_version
+
+/**
+ * Kotlin variables.
+ */
+def kotlin = [:]
+kotlin.stdlib_jdk8 = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+deps.kotlin = kotlin
+
+/**
+ * AndroidX variables.
+ */
+def androidx = [:]
+androidx.core_ktx = "androidx.core:core-ktx:$versions.androidx_core"
+androidx.appcompat = "androidx.appcompat:appcompat:$versions.androidx_appcompat"
+androidx.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.androidx_constraint"
+androidx.material = "com.google.android.material:material:$versions.androidx_material"
+deps.androidx = androidx
+
+/**
+ * Apply the commonly used repositories into the handler.
+ * @param repositories handler
+ * @return
+ */
+static def applyRepositories(RepositoryHandler handler) {
+    handler.google()
+    handler.jcenter()
+    handler.mavenCentral()
+    handler.maven { url "https://maven.fabric.io/public" }
+    handler.maven { url "https://jitpack.io" }
+    handler.maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+// Export applyRepositories method.
+ext.applyRepositories = this.&applyRepositories

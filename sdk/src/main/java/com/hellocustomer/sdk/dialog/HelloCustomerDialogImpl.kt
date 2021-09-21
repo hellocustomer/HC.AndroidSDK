@@ -5,15 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.hellocustomer.sdk.R
 import com.hellocustomer.sdk.SdkLogger
 import com.hellocustomer.sdk.databinding.FragmentHelloCustomerDialogBinding
-import com.hellocustomer.sdk.logger.defaultLogger
-import com.hellocustomer.sdk.evaluation.EvaluationButtonView
 import com.hellocustomer.sdk.survey.WebViewActivity
 
 internal class HelloCustomerDialogImpl : DialogFragment(), HelloCustomerDialog {
@@ -25,20 +22,16 @@ internal class HelloCustomerDialogImpl : DialogFragment(), HelloCustomerDialog {
     private val requireBinding: FragmentHelloCustomerDialogBinding
         get() = requireNotNull(_binding)
 
-    private val config: HelloCustomerConfig
+    private val config: HelloCustomerDialogConfig
         get() = requireNotNull(requireArguments().getParcelable(ARG_CONFIG)) {
             "Dialog's config argument is null.".also(logger::e)
-        }
-
-    private val requireWindow: Window
-        get() = requireNotNull(dialog?.window) {
-            "Required dialog's window is null.".also(logger::e)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(HelloCustomerViewModel::class.java)
+        val factory = HelloCustomerViewModelFactory(config = config)
+        viewModel = ViewModelProvider(this, factory).get(HelloCustomerViewModel::class.java)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -82,8 +75,8 @@ internal class HelloCustomerDialogImpl : DialogFragment(), HelloCustomerDialog {
         cardView.closeButton.setOnClickListener {
             dismissDialog()
         }
-        cardView.buttonClickListener = View.OnClickListener {
-            viewModel.onEvaluate(url = config.surveyUrl)
+        cardView.setOnEvaluateClickListener { score ->
+            viewModel.onEvaluate(score = score)
             dismissDialog()
         }
     }
@@ -100,7 +93,7 @@ internal class HelloCustomerDialogImpl : DialogFragment(), HelloCustomerDialog {
 
         private const val ARG_CONFIG = "ARG_CONFIG"
 
-        fun newInstance(config: HelloCustomerConfig): HelloCustomerDialogImpl =
+        fun newInstance(config: HelloCustomerDialogConfig): HelloCustomerDialogImpl =
             HelloCustomerDialogImpl().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_CONFIG, config)

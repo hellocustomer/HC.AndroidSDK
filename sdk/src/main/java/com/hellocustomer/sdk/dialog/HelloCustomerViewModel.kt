@@ -4,12 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.hellocustomer.sdk.utility.LiveEvent
 
-internal class HelloCustomerViewModel : ViewModel() {
+internal class HelloCustomerViewModel(
+    private val config: HelloCustomerDialogConfig
+) : ViewModel() {
 
     private val _navigation = LiveEvent<Navigation>()
     val navigation: LiveData<Navigation> = _navigation
 
-    fun onEvaluate(url: String) {
+    fun onEvaluate(score: Int) {
+        val url = config.surveyUriBuilder.build(score)
         _navigation.postValue(Navigation.WebPage(url))
     }
 

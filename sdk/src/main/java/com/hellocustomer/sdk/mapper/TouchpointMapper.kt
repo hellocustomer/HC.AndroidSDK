@@ -1,31 +1,57 @@
 package com.hellocustomer.sdk.mapper
 
 import android.graphics.Color
-import com.hellocustomer.sdk.dialog.HelloCustomerConfig
+import androidx.annotation.ColorInt
+import com.hellocustomer.sdk.HelloCustomerTouchpointConfig
+import com.hellocustomer.sdk.dialog.DialogType
+import com.hellocustomer.sdk.dialog.HelloCustomerDialogConfig
+import com.hellocustomer.sdk.network.dto.DialogTypeDto
+import com.hellocustomer.sdk.network.dto.LanguageDesignDto
+import com.hellocustomer.sdk.network.dto.QuestionDto
 import com.hellocustomer.sdk.network.dto.QuestionTypeDto
-import com.hellocustomer.sdk.network.dto.TouchpointDto
-import com.hellocustomer.sdk.network.dto.TranslationDto
+import com.hellocustomer.sdk.survey.SurveyUriBuilder
 
 internal object TouchpointMapper {
 
-    fun toConfig(dto: TouchpointDto, language: TranslationDto): HelloCustomerConfig {
-        return HelloCustomerConfig(
-            title = language.question,
-            buttonBackgroundColor = dto.buttonBackgroundColor.let(Color::parseColor),
-            buttonTextColor = dto.buttonTextColor.let(Color::parseColor),
-            buttonCount = when (dto.questionType) {
+    fun toConfig(
+        config: HelloCustomerTouchpointConfig,
+        firstQuestion: QuestionDto,
+        languageDesignDto: LanguageDesignDto,
+        fallbackDialogType: DialogType,
+        surveyUriBuilder: SurveyUriBuilder
+    ): HelloCustomerDialogConfig {
+        return HelloCustomerDialogConfig(
+            questionText = firstQuestion.text,
+            buttonBackgroundColor = languageDesignDto.opinionsButtonBgColor.let(this::parseColor),
+            buttonTextColor = languageDesignDto.opinionsButtonTextColor.let(this::parseColor),
+            buttonCount = when (firstQuestion.kind.type) {
                 QuestionTypeDto.NPS -> 10
                 QuestionTypeDto.CES -> 7
                 QuestionTypeDto.CSAT -> 5
+                QuestionTypeDto.UNKNOWN -> throw IllegalStateException("Question type is unknown.")
             },
-            rightHint = language.rightHint,
-            leftHint = language.leftHint,
-            paragraphColor = dto.paragraphColor.let(Color::parseColor),
-            textColor = dto.textColor.let(Color::parseColor),
-            surveyUrl = dto.surveyURL,
-            paragraphFontName = dto.paragraphFontName,
-            textFontName = dto.textFontName,
-            touchpointId = dto.touchpointId
+            rightHint = firstQuestion.label1 ?: "",
+            leftHint = firstQuestion.label2 ?: "",
+            questionTextColor = languageDesignDto.opinionsQuestionsColor.let(this::parseColor),
+            hintTextColor = languageDesignDto.opinionsParagraphColor.let(this::parseColor),
+            surveyUriBuilder = surveyUriBuilder,
+            questionFont = config.questionFont,
+            hintFont = config.hintFont,
+            touchpointId = config.touchpointId,
+            dialogType = when (languageDesignDto.dialogType) {
+                DialogTypeDto.BOTTOM -> DialogType.BOTTOM
+                DialogTypeDto.CENTER -> DialogType.CENTER
+                DialogTypeDto.UNKNOWN -> fallbackDialogType
+            }
         )
+    }
+
+    @ColorInt
+    private fun parseColor(value: String): Int = Color.parseColor(value.normalizeHexColor())
+
+    private fun String.normalizeHexColor(): String {
+        return if (this.length == 4) {
+            this.padEnd(7, this.last())
+        } else this
     }
 }

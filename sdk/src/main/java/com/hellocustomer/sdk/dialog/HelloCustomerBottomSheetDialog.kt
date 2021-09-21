@@ -20,7 +20,7 @@ internal class HelloCustomerBottomSheetDialog : BottomSheetDialogFragment(), Hel
     private val requireBinding: FragmentHelloCustomerBottomSheetBinding
         get() = requireNotNull(_binding)
 
-    private val config: HelloCustomerConfig
+    private val config: HelloCustomerDialogConfig
         get() = requireNotNull(requireArguments().getParcelable(ARG_CONFIG)) {
             "Bottom sheet's config argument is null.".also(logger::e)
         }
@@ -28,7 +28,8 @@ internal class HelloCustomerBottomSheetDialog : BottomSheetDialogFragment(), Hel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(HelloCustomerViewModel::class.java)
+        val factory = HelloCustomerViewModelFactory(config = config)
+        viewModel = ViewModelProvider(this, factory).get(HelloCustomerViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,8 +65,8 @@ internal class HelloCustomerBottomSheetDialog : BottomSheetDialogFragment(), Hel
         cardView.closeButton.setOnClickListener {
             dismissDialog()
         }
-        cardView.buttonClickListener = View.OnClickListener {
-            viewModel.onEvaluate(url = config.surveyUrl)
+        cardView.setOnEvaluateClickListener { score ->
+            viewModel.onEvaluate(score = score)
             dismissDialog()
         }
     }
@@ -82,7 +83,7 @@ internal class HelloCustomerBottomSheetDialog : BottomSheetDialogFragment(), Hel
 
         private const val ARG_CONFIG = "ARG_CONFIG"
 
-        fun newInstance(config: HelloCustomerConfig): HelloCustomerBottomSheetDialog =
+        fun newInstance(config: HelloCustomerDialogConfig): HelloCustomerBottomSheetDialog =
             HelloCustomerBottomSheetDialog().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_CONFIG, config)

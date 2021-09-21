@@ -3,15 +3,12 @@ package com.hellocustomer.sdk.evaluation
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.children
+import android.view.View.OnClickListener
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import com.google.android.flexbox.FlexboxLayout
 import com.hellocustomer.sdk.R
-import com.hellocustomer.sdk.dialog.HelloCustomerConfig
+import com.hellocustomer.sdk.dialog.HelloCustomerDialogConfig
 
 internal class EvaluationLayout : FlexboxLayout {
 
@@ -25,17 +22,17 @@ internal class EvaluationLayout : FlexboxLayout {
 
     constructor(context: Context) : this(context, null)
 
-    var buttonClickListener: OnClickListener? = null
-        set(value) {
-            for (button in buttons) {
-                button.setOnClickListener(value)
-            }
-        }
+    private var evaluateClickListener: OnEvaluateClickListener? = null
+    private val buttonClickListener = OnClickListener { button: View ->
+        check(button is EvaluationButtonView)
+        evaluateClickListener?.onClick(button.evaluation)
+    }
 
-    private val buttons: Sequence<EvaluationButtonView>
-        get() = children.filterIsInstance<EvaluationButtonView>()
+    fun setOnEvaluateClickListener(listener: OnEvaluateClickListener) {
+        this.evaluateClickListener = listener
+    }
 
-    fun generate(config: HelloCustomerConfig) {
+    fun generate(config: HelloCustomerDialogConfig) {
 
         for (number in 0..config.buttonCount) {
             val button = EvaluationButtonView(context)
@@ -59,7 +56,11 @@ internal class EvaluationLayout : FlexboxLayout {
                 config.buttonTextColor
                     ?.let(this::setTextColor)
             }
+            button.setOnClickListener(buttonClickListener)
         }
+    }
 
+    fun interface OnEvaluateClickListener {
+        fun onClick(score: Int)
     }
 }

@@ -2,9 +2,15 @@ package com.hellocustomer.sdk.logger
 
 import android.util.Log
 
-internal fun Any.defaultLogger(): Logger = DefaultLogger(tag = this.javaClass.simpleName)
-
 internal class DefaultLogger(private val tag: String? = null) : Logger {
+
+    init {
+        if (tag != null) {
+            check(tag.length in 0..23) {
+                "Maximum tag length is 23 characters. Was: ${tag.length}"
+            }
+        }
+    }
 
     override fun d(message: String, throwable: Throwable?) {
         Log.d(tag, message, throwable)

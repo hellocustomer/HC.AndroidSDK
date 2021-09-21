@@ -1,6 +1,6 @@
 package com.hellocustomer.sdk.dialog
 
-public enum class DialogType {
+internal enum class DialogType {
     BOTTOM,
     CENTER
 }
