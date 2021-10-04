@@ -48,5 +48,11 @@ internal class EvaluationCardView : CardView {
                 leftHint.setTextColor(color)
                 rightHint.setTextColor(color)
             }
+        config.hintFont?.create(context)?.let { typeface ->
+            leftHint.typeface = typeface
+            rightHint.typeface = typeface
+        }
+        config.questionFont?.create(context)
+            ?.let(headingTextView::setTypeface)
     }
 }
