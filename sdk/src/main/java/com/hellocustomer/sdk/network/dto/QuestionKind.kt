@@ -1,7 +1,9 @@
 package com.hellocustomer.sdk.network.dto
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 internal data class QuestionKind(
     @Json(name = "name") val type: QuestionTypeDto,
     @Json(name = "hasScore") val hasScore: Boolean,

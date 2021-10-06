@@ -1,8 +1,10 @@
 package com.hellocustomer.sdk.network.dto
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.util.Locale
 
+@JsonClass(generateAdapter = true)
 internal data class TouchpointDto(
     @Json(name = "campaign_UniqueID") val campaignUniqueID: String,
     @Json(name = "hasbeenArchived") val hasBeenArchived: Boolean,
