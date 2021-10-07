@@ -6,9 +6,13 @@ import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import com.hellocustomer.sdk.R
+import com.hellocustomer.sdk.databinding.ActivityWebViewBinding
 
 
 internal class WebViewActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityWebViewBinding
 
     private val urlArg: String
         get() = requireNotNull(intent.getStringExtra(EXTRA_URL))
@@ -16,8 +20,20 @@ internal class WebViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val webView = WebView(this)
-        webView.webViewClient = WebViewClient()
+        binding = ActivityWebViewBinding.inflate(layoutInflater)
+
+        setupWebView(binding.webView, urlArg)
+        setContentView(binding.root)
+        setupView()
+    }
+
+    private fun setupView(): Unit = with(binding) {
+        toolbar.setNavigationIcon(R.drawable.ic_close)
+        toolbar.setNavigationOnClickListener { finish() }
+    }
+
+    private fun setupWebView(webView: WebView, url: String) {
+        webView.webViewClient = SurveyWebClient()
 
         val settings = webView.settings
 
@@ -25,9 +41,14 @@ internal class WebViewActivity : AppCompatActivity() {
         settings.allowContentAccess = true
         settings.domStorageEnabled = true
 
-        setContentView(webView)
+        webView.loadUrl(url)
+    }
 
-        webView.loadUrl(urlArg)
+    inner class SurveyWebClient : WebViewClient() {
+
+        override fun onPageFinished(view: WebView, url: String) {
+            binding.toolbar.title = view.title
+        }
     }
 
     companion object {
