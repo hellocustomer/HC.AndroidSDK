@@ -11,6 +11,14 @@
         <item name="android:windowAnimationStyle">@style/HelloCustomer.Dialog.Animation</item>
     </style>
 
+    <style name="Theme.HelloCustomer.BottomSheetDialog" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.HelloCustomer.Design.BottomSheet.Modal</item>
+    </style>
+
+    <style name="Widget.HelloCustomer.Design.BottomSheet.Modal" parent="Widget.Design.BottomSheet.Modal">
+        <item name="behavior_peekHeight">512dp</item>
+    </style>
+
     <!-- endregion -->
 
     <!-- region Theme Overlay -->

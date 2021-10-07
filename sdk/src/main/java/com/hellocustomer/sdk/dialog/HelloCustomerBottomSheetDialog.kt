@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.hellocustomer.sdk.R
 import com.hellocustomer.sdk.SdkLogger
 import com.hellocustomer.sdk.databinding.FragmentHelloCustomerBottomSheetBinding
 import com.hellocustomer.sdk.survey.WebViewActivity
@@ -27,6 +29,8 @@ internal class HelloCustomerBottomSheetDialog : BottomSheetDialogFragment(), Hel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_HelloCustomer_BottomSheetDialog)
 
         val factory = HelloCustomerViewModelFactory(config = config)
         viewModel = ViewModelProvider(this, factory).get(HelloCustomerViewModel::class.java)
