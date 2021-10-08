@@ -27,6 +27,10 @@ internal class HelloCustomerBottomSheetDialog : BottomSheetDialogFragment(), Hel
             "Bottom sheet's config argument is null.".also(logger::e)
         }
 
+    init {
+        isCancelable = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
