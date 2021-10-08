@@ -13,10 +13,16 @@ internal class HelloCustomerViewModel(
 
     fun onEvaluate(score: Int) {
         val url = config.surveyUriBuilder.build(score)
-        _navigation.postValue(Navigation.WebPage(url))
+        _navigation.value = Navigation.WebPage(url)
+        _navigation.value = Navigation.Close
+    }
+
+    fun onCloseButtonClick() {
+        _navigation.postValue(Navigation.Close)
     }
 
     sealed class Navigation {
         data class WebPage(val url: String) : Navigation()
+        object Close : Navigation()
     }
 }

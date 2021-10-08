@@ -66,19 +66,15 @@ internal class HelloCustomerBottomSheetDialog : BottomSheetDialogFragment(), Hel
 
     private fun setupView(): Unit = with(requireBinding) {
         cardView.bind(config)
-        cardView.closeButton.setOnClickListener {
-            dismissDialog()
-        }
-        cardView.setOnEvaluateClickListener { score ->
-            viewModel.onEvaluate(score = score)
-            dismissDialog()
-        }
+        cardView.closeButton.setOnClickListener { viewModel.onCloseButtonClick() }
+        cardView.setOnEvaluateClickListener { score -> viewModel.onEvaluate(score = score) }
     }
 
     private fun observeViewModel() {
         viewModel.navigation.observe(viewLifecycleOwner) { navigation ->
             when (navigation) {
                 is HelloCustomerViewModel.Navigation.WebPage -> WebViewActivity.start(requireContext(), navigation.url)
+                is HelloCustomerViewModel.Navigation.Close -> dismissDialog()
             }
         }
     }

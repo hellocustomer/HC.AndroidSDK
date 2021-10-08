@@ -72,19 +72,15 @@ internal class HelloCustomerDialogImpl : DialogFragment(), HelloCustomerDialog {
 
     private fun setupView(): Unit = with(requireBinding) {
         cardView.bind(config)
-        cardView.closeButton.setOnClickListener {
-            dismissDialog()
-        }
-        cardView.setOnEvaluateClickListener { score ->
-            viewModel.onEvaluate(score = score)
-            dismissDialog()
-        }
+        cardView.closeButton.setOnClickListener { viewModel.onCloseButtonClick() }
+        cardView.setOnEvaluateClickListener { score -> viewModel.onEvaluate(score = score) }
     }
 
     private fun observeViewModel() {
         viewModel.navigation.observe(this) { navigation ->
             when (navigation) {
                 is HelloCustomerViewModel.Navigation.WebPage -> WebViewActivity.start(requireContext(), navigation.url)
+                is HelloCustomerViewModel.Navigation.Close -> dismissDialog()
             }
         }
     }
