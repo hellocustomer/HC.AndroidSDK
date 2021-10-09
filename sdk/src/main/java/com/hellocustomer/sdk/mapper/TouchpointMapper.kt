@@ -5,10 +5,10 @@ import androidx.annotation.ColorInt
 import com.hellocustomer.sdk.HelloCustomerTouchpointConfig
 import com.hellocustomer.sdk.dialog.DialogType
 import com.hellocustomer.sdk.dialog.HelloCustomerDialogConfig
+import com.hellocustomer.sdk.evaluation.EvaluationButtonBuilder
 import com.hellocustomer.sdk.network.dto.DialogTypeDto
 import com.hellocustomer.sdk.network.dto.LanguageDesignDto
 import com.hellocustomer.sdk.network.dto.QuestionDto
-import com.hellocustomer.sdk.network.dto.QuestionTypeDto
 import com.hellocustomer.sdk.survey.SurveyUriBuilder
 
 internal object TouchpointMapper {
@@ -22,14 +22,12 @@ internal object TouchpointMapper {
     ): HelloCustomerDialogConfig {
         return HelloCustomerDialogConfig(
             questionText = firstQuestion.text,
-            buttonBackgroundColor = languageDesignDto.opinionsButtonBgColor.let(this::parseColor),
-            buttonTextColor = languageDesignDto.opinionsButtonTextColor.let(this::parseColor),
-            buttonCount = when (firstQuestion.kind.type) {
-                QuestionTypeDto.NPS -> 10
-                QuestionTypeDto.CES -> 7
-                QuestionTypeDto.CSAT -> 5
-                QuestionTypeDto.UNKNOWN -> throw IllegalStateException("Question type is unknown.")
-            },
+            buttonBuilder = EvaluationButtonBuilder(
+                questionTypeDto = firstQuestion.kind.type,
+                useColorScale = languageDesignDto.opinionsUseColorScale,
+                buttonBackgroundColor = languageDesignDto.opinionsButtonBgColor.let(this::parseColor),
+                buttonTextColor = languageDesignDto.opinionsButtonTextColor.let(this::parseColor),
+            ),
             rightHint = firstQuestion.label1 ?: "",
             leftHint = firstQuestion.label2 ?: "",
             questionTextColor = languageDesignDto.opinionsQuestionsColor.let(this::parseColor),
