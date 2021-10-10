@@ -51,12 +51,6 @@ internal class EvaluationLayout : FlexboxLayout {
                     left = context.resources.getDimensionPixelSize(R.dimen.size_8),
                     right = context.resources.getDimensionPixelSize(R.dimen.size_8),
                 )
-                config.buttonBackgroundColor?.let { color ->
-                    backgroundTintList = ColorStateList.valueOf(color)
-                    rippleColor = ColorStateList.valueOf(getContrastColor(backgroundColor = color) alpha 0.32)
-                }
-                config.buttonTextColor
-                    ?.let(this::setTextColor)
             }
             button.setOnClickListener(buttonClickListener)
         }

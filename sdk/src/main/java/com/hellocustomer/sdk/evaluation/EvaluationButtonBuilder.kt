@@ -24,7 +24,7 @@ internal data class EvaluationButtonBuilder(
     }
 
     fun build(context: Context): Array<EvaluationButtonView> = when (questionTypeDto) {
-        QuestionTypeDto.NPS -> Array(10) { scoreValue ->
+        QuestionTypeDto.NPS -> Array(11) { scoreValue ->
             createButton(
                 scoreValue = scoreValue,
                 context = context,
