@@ -43,7 +43,7 @@ internal class HelloCustomerApiImpl(
     private fun call(url: URL, requestMethod: String, headers: Map<String, String>): Result<Response> {
         val result = kotlin.runCatching {
             logD("--> $requestMethod ${url.toURI()}")
-            headers.forEach { (key, value) -> logD("$key: $value") }
+            headers.forEach { (key, value) -> logD("--> $key: $value") }
 
             val connection: HttpURLConnection = (url.openConnection() as HttpURLConnection).apply {
                 this.connectTimeout = 5000

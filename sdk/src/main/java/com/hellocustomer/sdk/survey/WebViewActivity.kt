@@ -33,7 +33,7 @@ internal class WebViewActivity : AppCompatActivity() {
     }
 
     private fun setupWebView(webView: WebView, url: String) {
-        webView.webViewClient = SurveyWebClient()
+        webView.webViewClient = WebViewClient()
 
         val settings = webView.settings
 
@@ -42,13 +42,6 @@ internal class WebViewActivity : AppCompatActivity() {
         settings.domStorageEnabled = true
 
         webView.loadUrl(url)
-    }
-
-    inner class SurveyWebClient : WebViewClient() {
-
-        override fun onPageFinished(view: WebView, url: String) {
-            binding.toolbar.title = view.title
-        }
     }
 
     companion object {

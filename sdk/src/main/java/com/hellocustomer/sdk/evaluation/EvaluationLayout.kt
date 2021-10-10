@@ -36,9 +36,7 @@ internal class EvaluationLayout : FlexboxLayout {
     }
 
     fun generate(config: HelloCustomerDialogConfig) {
-
-        for (number in 0..config.buttonCount) {
-            val button = EvaluationButtonView(context)
+        config.buttonBuilder.build(context).forEach { button ->
             addView(button)
 
             button.updateLayoutParams<LayoutParams> {
@@ -47,19 +45,12 @@ internal class EvaluationLayout : FlexboxLayout {
             }
 
             button.apply {
-                text = number.toString()
                 insetTop = 0
                 insetBottom = 0
                 updatePadding(
                     left = context.resources.getDimensionPixelSize(R.dimen.size_8),
                     right = context.resources.getDimensionPixelSize(R.dimen.size_8),
                 )
-                config.buttonBackgroundColor?.let { color ->
-                    backgroundTintList = ColorStateList.valueOf(color)
-                    rippleColor = ColorStateList.valueOf(getContrastColor(backgroundColor = color) alpha 0.32)
-                }
-                config.buttonTextColor
-                    ?.let(this::setTextColor)
             }
             button.setOnClickListener(buttonClickListener)
         }
