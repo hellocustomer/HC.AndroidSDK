@@ -80,7 +80,7 @@ internal class HelloCustomerService(
                             respondentFirstName = touchpointConfig.respondentFirstName,
                             respondentLastName = touchpointConfig.respondentLastName,
                             respondentEmailAddress = touchpointConfig.respondentEmailAddress,
-                            userPreferredLanguage = userLocale.language,
+                            userPreferredLanguage = question.languageCulture,
                             baseApiScheme = sdkConfig.baseApiScheme,
                             baseApiUrl = sdkConfig.baseOpinionsUrl
                         )
