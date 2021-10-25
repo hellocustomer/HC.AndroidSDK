@@ -25,6 +25,19 @@ import java.util.concurrent.Executors
 
 //region Public API
 
+/**
+ *  Request loading touchpoint in [AppCompatActivity][androidx.appcompat.app.AppCompatActivity]
+ *  and show when you want by calling [show][com.hellocustomer.sdk.dialog.HelloCustomerDialog]
+ *  method in [onSuccess] callback.
+ *
+ *  @param config HelloCustomer configuration class
+ *  @param executorService The service will perform background work
+ *  @param mainThreadHandler Handler will invoke callbacks [onError] and [onSuccess]
+ *  @param onError This callback will be called once the request throws an exception.
+ *  @param onSuccess This callback will be called once the request finished successfully.
+ *
+ *  @see HelloCustomerDialog
+ */
 @JvmOverloads
 public fun AppCompatActivity.loadTouchpoint(
     config: HelloCustomerTouchpointConfig,
@@ -41,6 +54,19 @@ public fun AppCompatActivity.loadTouchpoint(
     mainThreadHandler = mainThreadHandler
 )
 
+/**
+ *  Request loading touchpoint in [Fragment][androidx.fragment.app.Fragment]
+ *  and show when you want by calling [show][com.hellocustomer.sdk.dialog.HelloCustomerDialog]
+ *  method in [onSuccess] callback.
+ *
+ *  @param config HelloCustomer configuration class
+ *  @param executorService The service will perform background work
+ *  @param mainThreadHandler Handler will invoke callbacks [onError] and [onSuccess]
+ *  @param onError This callback will be called once the request throws an exception.
+ *  @param onSuccess This callback will be called once the request finished successfully.
+ *
+ *  @see HelloCustomerDialog
+ */
 @JvmOverloads
 public fun Fragment.loadTouchpoint(
     config: HelloCustomerTouchpointConfig,
@@ -57,6 +83,19 @@ public fun Fragment.loadTouchpoint(
     mainThreadHandler = mainThreadHandler
 )
 
+/**
+ *  Request loading touchpoint in any place and show when you want
+ *  by calling [show][com.hellocustomer.sdk.dialog.HelloCustomerDialog] method in [onSuccess] callback.
+ *
+ *  @param context Context to get device configuration etc.
+ *  @param config HelloCustomer configuration class
+ *  @param executorService The service will perform background work
+ *  @param mainThreadHandler Handler will invoke callbacks [onError] and [onSuccess]
+ *  @param onError This callback will be called once the request throws an exception.
+ *  @param onSuccess This callback will be called once the request finished successfully.
+ *
+ *  @see HelloCustomerDialog
+ */
 @JvmOverloads
 public fun loadTouchpoint(
     context: Context,
