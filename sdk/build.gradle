@@ -6,14 +6,16 @@ plugins {
     id 'maven-publish'
 }
 
+apply from: "$rootDir/versioning.gradle"
+
 android {
     compileSdkVersion deps.build_version.compile_sdk
 
     defaultConfig {
         minSdkVersion deps.build_version.min_sdk
         targetSdkVersion deps.build_version.target_sdk
-        versionCode 1
-        versionName "1.0"
+        versionCode libraryVersionCode
+        versionName libraryVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
