@@ -40,7 +40,11 @@ internal class EvaluationLayout : FlexboxLayout {
             addView(button)
 
             button.updateLayoutParams<LayoutParams> {
-                width = context.resources.getDimensionPixelSize(R.dimen.evaluation_button_size)
+                width = if (config.labeledQuestionView){
+                    context.resources.getDimensionPixelSize(R.dimen.evaluation_label_button_width)
+                } else {
+                    context.resources.getDimensionPixelSize(R.dimen.evaluation_button_size)
+                }
                 height = context.resources.getDimensionPixelSize(R.dimen.evaluation_button_size)
             }
 
