@@ -1,10 +1,13 @@
 package com.hellocustomer.sdk.dialog
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
@@ -43,13 +46,17 @@ internal class HelloCustomerDialogImpl : DialogFragment(), HelloCustomerDialog {
 
         setupView()
 
-        return Dialog(requireContext()).apply {
+        return AlertDialog.Builder(requireActivity())
+            .setView(requireBinding.root)
+            .create()
+            .apply {
             setContentView(requireBinding.root)
 
             requireNotNull(window) {
                 "Cannot set the animation attribute. The dialog's window is null.".also(logger::e)
             }.also { window ->
-                window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
                 window.attributes.windowAnimations = R.style.HelloCustomer_Dialog_Animation
             }
         }
