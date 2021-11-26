@@ -31,6 +31,7 @@ internal data class EvaluationButtonBuilder(
         QuestionTypeDto.NPS -> Array(11) { scoreValue ->
             createButton(
                 text = scoreValue.toString(),
+                evaluation = scoreValue,
                 context = context,
                 scaleButtonColor = when (scoreValue) {
                     in 0..1 -> context.getCompatColor(R.color.guardsmanRed)
@@ -49,6 +50,7 @@ internal data class EvaluationButtonBuilder(
             } else scoreValue.toString()
             createButton(
                 text = text,
+                evaluation = scoreValue,
                 context = context,
                 scaleButtonColor = when (scoreValue) {
                     in 1..2 -> context.getCompatColor(R.color.guardsmanRed)
@@ -63,6 +65,7 @@ internal data class EvaluationButtonBuilder(
             val scoreValue = index.plus(1)
             createButton(
                 text = scoreValue.toString(),
+                evaluation = scoreValue,
                 context = context,
                 scaleButtonColor = when (scoreValue) {
                     1 -> context.getCompatColor(R.color.guardsmanRed)
@@ -79,11 +82,13 @@ internal data class EvaluationButtonBuilder(
 
     private fun createButton(
         text: String,
+        evaluation: Int,
         context: Context,
         @ColorInt scaleButtonColor: Int
     ): EvaluationButtonView {
         return EvaluationButtonView(context).apply {
             setText(text)
+            this.evaluation = evaluation
             @ColorInt val backgroundColor: Int? = if (useColorScale) scaleButtonColor else buttonBackgroundColor
             backgroundColor?.let { this.backgroundTintList = ColorStateList.valueOf(it) }
             buttonTextColor?.let(this::setTextColor)

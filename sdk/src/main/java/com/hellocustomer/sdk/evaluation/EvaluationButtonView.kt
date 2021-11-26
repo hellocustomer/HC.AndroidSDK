@@ -20,8 +20,7 @@ internal class EvaluationButtonView : MaterialButton {
      * Parses the text as an Int number and returns the result
      * or -1 if the text is not a valid representation of a number.
      */
-    val evaluation: Int
-        get() = text.toString().toIntOrNull() ?: -1
+    var evaluation: Int = -1
 
     init {
         setSupportAllCaps(true)
