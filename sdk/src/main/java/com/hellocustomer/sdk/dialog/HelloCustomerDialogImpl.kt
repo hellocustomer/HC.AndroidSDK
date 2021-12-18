@@ -46,10 +46,7 @@ internal class HelloCustomerDialogImpl : DialogFragment(), HelloCustomerDialog {
 
         setupView()
 
-        return AlertDialog.Builder(requireActivity())
-            .setView(requireBinding.root)
-            .create()
-            .apply {
+        return Dialog(requireContext()).apply {
             setContentView(requireBinding.root)
 
             requireNotNull(window) {
