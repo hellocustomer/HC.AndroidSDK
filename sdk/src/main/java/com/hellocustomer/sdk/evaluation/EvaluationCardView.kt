@@ -54,5 +54,10 @@ internal class EvaluationCardView : CardView {
         }
         config.questionFont?.create(context)
             ?.let(headingTextView::setTypeface)
+
+        if (config.labeledQuestionView){
+            leftHint.visibility = GONE
+            rightHint.visibility = GONE
+        }
     }
 }

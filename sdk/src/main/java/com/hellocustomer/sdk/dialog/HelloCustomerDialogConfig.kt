@@ -13,6 +13,8 @@ internal data class HelloCustomerDialogConfig(
     val questionText: String,
     val leftHint: String,
     val rightHint: String,
+    val questionLabels: Map<Int, String>,
+    val labeledQuestionView: Boolean,
     val buttonBuilder: EvaluationButtonBuilder,
     @ColorInt val questionTextColor: Int?,
     val questionFont: FontBuilder?,

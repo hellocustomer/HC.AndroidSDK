@@ -46,8 +46,8 @@ internal class HelloCustomerApiImpl(
             headers.forEach { (key, value) -> logD("--> $key: $value") }
 
             val connection: HttpURLConnection = (url.openConnection() as HttpURLConnection).apply {
-                this.connectTimeout = 5000
-                this.readTimeout = 5000
+                this.connectTimeout = 20 * 1000
+                this.readTimeout = 20 * 1000
                 this.requestMethod = requestMethod
                 headers.forEach { (key, value) -> this.setRequestProperty(key, value) }
             }

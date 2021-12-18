@@ -8,11 +8,15 @@ import com.hellocustomer.sdk.R
 import com.hellocustomer.sdk.network.dto.QuestionTypeDto
 import com.hellocustomer.sdk.utility.getCompatColor
 import kotlinx.parcelize.Parcelize
+import androidx.core.widget.TextViewCompat
+
 
 @Parcelize
 internal data class EvaluationButtonBuilder(
     private val questionTypeDto: QuestionTypeDto,
     private val useColorScale: Boolean,
+    private val labels: Map<Int, String>,
+    private val useCustomLabels : Boolean,
     @ColorInt private val buttonBackgroundColor: Int?,
     @ColorInt private val buttonTextColor: Int?
 ) : Parcelable {
@@ -26,7 +30,8 @@ internal data class EvaluationButtonBuilder(
     fun build(context: Context): Array<EvaluationButtonView> = when (questionTypeDto) {
         QuestionTypeDto.NPS -> Array(11) { scoreValue ->
             createButton(
-                scoreValue = scoreValue,
+                text = scoreValue.toString(),
+                evaluation = scoreValue,
                 context = context,
                 scaleButtonColor = when (scoreValue) {
                     in 0..1 -> context.getCompatColor(R.color.guardsmanRed)
@@ -40,8 +45,12 @@ internal data class EvaluationButtonBuilder(
         }
         QuestionTypeDto.CES -> Array(7) { index ->
             val scoreValue = index.plus(1)
+            val text = if (useCustomLabels){
+                labels[scoreValue]!!
+            } else scoreValue.toString()
             createButton(
-                scoreValue = scoreValue,
+                text = text,
+                evaluation = scoreValue,
                 context = context,
                 scaleButtonColor = when (scoreValue) {
                     in 1..2 -> context.getCompatColor(R.color.guardsmanRed)
@@ -55,7 +64,8 @@ internal data class EvaluationButtonBuilder(
         QuestionTypeDto.CSAT -> Array(5) { index ->
             val scoreValue = index.plus(1)
             createButton(
-                scoreValue = scoreValue,
+                text = scoreValue.toString(),
+                evaluation = scoreValue,
                 context = context,
                 scaleButtonColor = when (scoreValue) {
                     1 -> context.getCompatColor(R.color.guardsmanRed)
@@ -71,15 +81,27 @@ internal data class EvaluationButtonBuilder(
     }
 
     private fun createButton(
-        scoreValue: Int,
+        text: String,
+        evaluation: Int,
         context: Context,
         @ColorInt scaleButtonColor: Int
     ): EvaluationButtonView {
         return EvaluationButtonView(context).apply {
-            text = scoreValue.toString()
+            setText(text)
+            this.evaluation = evaluation
             @ColorInt val backgroundColor: Int? = if (useColorScale) scaleButtonColor else buttonBackgroundColor
             backgroundColor?.let { this.backgroundTintList = ColorStateList.valueOf(it) }
             buttonTextColor?.let(this::setTextColor)
+            if (useCustomLabels) {
+                TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
+                    this,
+                    10,
+                    14,
+                    10,
+                    TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
+                )
+                maxLines = 2
+            }
         }
     }
 }

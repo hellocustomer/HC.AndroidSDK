@@ -9,6 +9,7 @@ import com.hellocustomer.sdk.evaluation.EvaluationButtonBuilder
 import com.hellocustomer.sdk.network.dto.DialogTypeDto
 import com.hellocustomer.sdk.network.dto.LanguageDesignDto
 import com.hellocustomer.sdk.network.dto.QuestionDto
+import com.hellocustomer.sdk.network.dto.QuestionTypeDto
 import com.hellocustomer.sdk.survey.SurveyUriBuilder
 
 internal object TouchpointMapper {
@@ -20,14 +21,19 @@ internal object TouchpointMapper {
         fallbackDialogType: DialogType,
         surveyUriBuilder: SurveyUriBuilder
     ): HelloCustomerDialogConfig {
+        val labeledQuestionView = firstQuestion.rateType == 4L && firstQuestion.kind.type == QuestionTypeDto.CES
         return HelloCustomerDialogConfig(
             questionText = firstQuestion.text,
             buttonBuilder = EvaluationButtonBuilder(
                 questionTypeDto = firstQuestion.kind.type,
                 useColorScale = languageDesignDto.opinionsUseColorScale,
+                labels = firstQuestion.labels,
+                useCustomLabels = labeledQuestionView,
                 buttonBackgroundColor = languageDesignDto.opinionsButtonBgColor.let(this::parseColor),
                 buttonTextColor = languageDesignDto.opinionsButtonTextColor.let(this::parseColor),
             ),
+            questionLabels = firstQuestion.labels,
+            labeledQuestionView = labeledQuestionView,
             rightHint = firstQuestion.label1 ?: "",
             leftHint = firstQuestion.label2 ?: "",
             questionTextColor = languageDesignDto.opinionsQuestionsColor.let(this::parseColor),
