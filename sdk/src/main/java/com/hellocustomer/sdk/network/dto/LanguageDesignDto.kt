@@ -9,7 +9,7 @@ internal class LanguageDesignDto(
     @Json(name ="content_LabelCopyright") val contentLabelCopyright: String,
     @Json(name ="response_Submitted") val responseSubmitted: String,
     @Json(name ="response_Quarantine") val responseQuarantine: String,
-    @Json(name ="language_Name") val languageName: String,
+    @Json(name ="language_Name") val languageName: String?,
     @Json(name ="opinions_Button_TextColor") val opinionsButtonTextColor: String,
     @Json(name ="opinions_Button_BgColor") val opinionsButtonBgColor: String,
     @Json(name ="opinions_Button_Text") val opinionsButtonText: String,

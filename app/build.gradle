@@ -6,6 +6,9 @@ plugins {
 android {
     compileSdkVersion deps.build_version.compile_sdk
 
+    def props = new Properties()
+    file("touchpoint.properties").withInputStream { props.load(it) }
+
     defaultConfig {
         applicationId "com.hellocustomer.sdk"
         minSdkVersion deps.build_version.min_sdk
@@ -14,6 +17,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "HcAuthToken", "\"" + props.getProperty("HcAuthToken") + "\""
+        buildConfigField "String", "HcCompanyId", "\"" + props.getProperty("HcCompanyId") + "\""
+        buildConfigField "String", "HcTouchpoint1Id", "\"" + props.getProperty("HcTouchpoint1Id") + "\""
+        buildConfigField "String", "HcTouchpoint2Id", "\"" + props.getProperty("HcTouchpoint2Id") + "\""
+        buildConfigField "String", "HcTouchpoint3Id", "\"" + props.getProperty("HcTouchpoint3Id") + "\""
     }
 
     buildTypes {

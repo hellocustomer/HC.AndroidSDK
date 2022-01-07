@@ -40,9 +40,9 @@ internal class HelloCustomerService(
                 .appendPath(sdkConfig.apiVersion)
                 .appendPath(userLocale.language)
                 .appendPath("company")
-                .appendPath(touchpointConfig.companyId)
+                .appendPath(touchpointConfig.companyId.toString())
                 .appendPath("touchpoint")
-                .appendPath(touchpointConfig.touchpointId)
+                .appendPath(touchpointConfig.touchpointId.toString())
                 .build()
                 .toString()
 

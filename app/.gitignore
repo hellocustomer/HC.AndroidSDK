@@ -27,3 +27,4 @@ local.properties
 
 #jenv
 /.java-version
+/touchpoint.properties

@@ -6,10 +6,11 @@ import com.hellocustomer.sdk.evaluation.EvaluationButtonBuilder
 import com.hellocustomer.sdk.font.FontBuilder
 import com.hellocustomer.sdk.survey.SurveyUriBuilder
 import kotlinx.parcelize.Parcelize
+import java.util.UUID
 
 @Parcelize
 internal data class HelloCustomerDialogConfig(
-    val touchpointId: String,
+    val touchpointId: UUID,
     val questionText: String,
     val leftHint: String,
     val rightHint: String,

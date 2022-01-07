@@ -3,11 +3,12 @@ package com.hellocustomer.sdk.survey
 import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.util.UUID
 
 @Parcelize
 internal data class SurveyUriBuilder(
-    private val companyId: String,
-    private val touchpointId: String,
+    private val companyId: UUID,
+    private val touchpointId: UUID,
     private val metadata: Map<String, String>,
     private val respondentFirstName: String?,
     private val respondentLastName: String?,
@@ -22,8 +23,8 @@ internal data class SurveyUriBuilder(
         .authority(baseApiUrl)
         .appendPath(userPreferredLanguage)
         .appendPath("AskAnywhereCampaign")
-        .appendPath(companyId)
-        .appendPath(touchpointId)
+        .appendPath(companyId.toString())
+        .appendPath(touchpointId.toString())
         .apply {
             metadata.forEach { (key, value) -> appendQueryParameter("entry.metadata[$key]", value) }
             respondentFirstName?.let { appendQueryParameter("entry.respondent.firstname", it) }
