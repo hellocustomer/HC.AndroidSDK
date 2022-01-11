@@ -5,9 +5,7 @@ package com.hellocustomer.sdk
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.HandlerCompat
-import androidx.fragment.app.Fragment
 import com.hellocustomer.sdk.dialog.HelloCustomerDialog
 import com.hellocustomer.sdk.logger.DefaultLogger
 import com.hellocustomer.sdk.network.HelloCustomerApi
@@ -25,94 +23,71 @@ import java.util.concurrent.Executors
 
 //region Public API
 
-/**
- *  Request loading touchpoint in [AppCompatActivity][androidx.appcompat.app.AppCompatActivity]
- *  and show when you want by calling [show][com.hellocustomer.sdk.dialog.HelloCustomerDialog]
- *  method in [onSuccess] callback.
- *
- *  @param config HelloCustomer configuration class
- *  @param executorService The service will perform background work
- *  @param mainThreadHandler Handler will invoke callbacks [onError] and [onSuccess]
- *  @param onError This callback will be called once the request throws an exception.
- *  @param onSuccess This callback will be called once the request finished successfully.
- *
- *  @see HelloCustomerDialog
- */
-@JvmOverloads
-public fun AppCompatActivity.loadTouchpoint(
-    config: HelloCustomerTouchpointConfig,
-    executorService: ExecutorService = DefaultExecutorService,
-    mainThreadHandler: Handler = DefaultMainThreadHandler,
-    onError: (Throwable) -> Unit = handleError::invoke,
-    onSuccess: (HelloCustomerDialog) -> Unit = handleSuccess::invoke
-): Unit = loadTouchpoint(
-    context = this,
-    config = config,
-    onSuccess = onSuccess,
-    onError = onError,
-    executorService = executorService,
-    mainThreadHandler = mainThreadHandler
-)
+public object HelloCustomerSdk {
+    /**
+     *  Request loading touchpoint in any place and show when you want
+     *  by calling [show][com.hellocustomer.sdk.dialog.HelloCustomerDialog] method in [onSuccess] callback.
+     *
+     *  @param context Context to get device configuration etc.
+     *  @param config HelloCustomer configuration class
+     *  @param executorService The service will perform background work
+     *  @param mainThreadHandler Handler will invoke callbacks [onError] and [onSuccess]
+     *  @param onError This callback will be called once the request throws an exception.
+     *  @param onSuccess This callback will be called once the request finished successfully.
+     *
+     *  @see HelloCustomerDialog
+     */
+    @JvmOverloads
+    public fun loadTouchpoint(
+        context: Context,
+        config: HelloCustomerTouchpointConfig,
+        onSuccess: (HelloCustomerDialog) -> Unit,
+        onError: (Throwable) -> Unit,
+        executorService: ExecutorService = DefaultExecutorService,
+        mainThreadHandler: Handler = DefaultMainThreadHandler,
+    ): Unit = loadTouchpoint(
+        context = context,
+        touchpointConfig = config,
+        sdkConfig = SdkConfig,
+        onError = onError,
+        onSuccess = onSuccess,
+        executorService = executorService,
+        mainThreadHandler = mainThreadHandler
+    )
 
-/**
- *  Request loading touchpoint in [Fragment][androidx.fragment.app.Fragment]
- *  and show when you want by calling [show][com.hellocustomer.sdk.dialog.HelloCustomerDialog]
- *  method in [onSuccess] callback.
- *
- *  @param config HelloCustomer configuration class
- *  @param executorService The service will perform background work
- *  @param mainThreadHandler Handler will invoke callbacks [onError] and [onSuccess]
- *  @param onError This callback will be called once the request throws an exception.
- *  @param onSuccess This callback will be called once the request finished successfully.
- *
- *  @see HelloCustomerDialog
- */
-@JvmOverloads
-public fun Fragment.loadTouchpoint(
-    config: HelloCustomerTouchpointConfig,
-    executorService: ExecutorService = DefaultExecutorService,
-    mainThreadHandler: Handler = DefaultMainThreadHandler,
-    onError: (Throwable) -> Unit = handleError::invoke,
-    onSuccess: (HelloCustomerDialog) -> Unit = handleSuccess::invoke
-): Unit = loadTouchpoint(
-    context = requireContext(),
-    config = config,
-    onSuccess = onSuccess,
-    onError = onError,
-    executorService = executorService,
-    mainThreadHandler = mainThreadHandler
-)
+    /**
+     *  Checks if touchpoint is set to production or not
+     *
+     *  @param context Context to get device configuration etc.
+     *  @param config HelloCustomer configuration class
+     *  @param executorService The service will perform background work
+     *  @param mainThreadHandler Handler will invoke callbacks [onError] and [onSuccess]
+     *  @param onError This callback will be called once the request throws an exception.
+     *  @param onSuccess This callback will be called once the request finished successfully.
+     *
+     */
+    public fun checkIfTouchpointIsActive(
+        context: Context,
+        config: HelloCustomerTouchpointConfig,
+        executorService: ExecutorService = DefaultExecutorService,
+        mainThreadHandler: Handler = DefaultMainThreadHandler,
+        onSuccess: (Boolean) -> Unit,
+        onError: (Throwable) -> Unit,
+    ) {
+        HelloCustomerService(
+            executorService = executorService,
+            mainThreadHandler = mainThreadHandler
+        ).checkIfTouchpointIsActive(
+            context = context,
+            sdkConfig = SdkConfig,
+            touchpointConfig = config,
+            onError = onError,
+            onSuccess = onSuccess
+        )
+    }
+}
 
-/**
- *  Request loading touchpoint in any place and show when you want
- *  by calling [show][com.hellocustomer.sdk.dialog.HelloCustomerDialog] method in [onSuccess] callback.
- *
- *  @param context Context to get device configuration etc.
- *  @param config HelloCustomer configuration class
- *  @param executorService The service will perform background work
- *  @param mainThreadHandler Handler will invoke callbacks [onError] and [onSuccess]
- *  @param onError This callback will be called once the request throws an exception.
- *  @param onSuccess This callback will be called once the request finished successfully.
- *
- *  @see HelloCustomerDialog
- */
-@JvmOverloads
-public fun loadTouchpoint(
-    context: Context,
-    config: HelloCustomerTouchpointConfig,
-    executorService: ExecutorService = DefaultExecutorService,
-    mainThreadHandler: Handler = DefaultMainThreadHandler,
-    onError: (Throwable) -> Unit = handleError::invoke,
-    onSuccess: (HelloCustomerDialog) -> Unit = handleSuccess::invoke
-): Unit = loadTouchpoint(
-    context = context,
-    touchpointConfig = config,
-    sdkConfig = SdkConfig,
-    onError = onError,
-    onSuccess = onSuccess,
-    executorService = executorService,
-    mainThreadHandler = mainThreadHandler
-)
+
 
 //endregion
 
@@ -125,8 +100,8 @@ internal val DefaultMainThreadHandler: Handler by lazy {
     HandlerCompat.createAsync(Looper.getMainLooper())
 }
 internal val SdkConfig: SdkConfiguration = HelloCustomerSdkConfig(
-    baseApiUrl = "proxy.hellocustomer.dev",
-    baseOpinionsUrl = "opinions-development.hellocustomer.com",
+    baseApiUrl = "api.hellocustomer.com",
+    baseOpinionsUrl = "opinions.hellocustomer.com",
     baseApiScheme = "https",
     apiVersion = "V2.0"
 )
@@ -149,11 +124,6 @@ internal val SdkApi: HelloCustomerApi = HelloCustomerApiImpl(
     },
     logger = DefaultLogger(tag = "HELLO_CUSTOMER_HTTP")
 )
-
-internal val handleSuccess: (HelloCustomerDialog) -> Unit = {}
-internal val handleError: (Throwable) -> Unit = { throwable ->
-    SdkLogger.e(throwable, throwable.localizedMessage ?: "")
-}
 
 private fun loadTouchpoint(
     context: Context,

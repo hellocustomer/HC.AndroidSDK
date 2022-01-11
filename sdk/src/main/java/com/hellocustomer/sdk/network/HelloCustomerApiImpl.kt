@@ -1,7 +1,7 @@
 package com.hellocustomer.sdk.network
 
 import com.hellocustomer.sdk.exception.HelloCustomerHttpException
-import com.hellocustomer.sdk.exception.HelloCustomerSdkException
+import com.hellocustomer.sdk.exception.UnauthorizedException
 import com.hellocustomer.sdk.logger.Logger
 import com.hellocustomer.sdk.network.dto.LanguageDesignDto
 import com.hellocustomer.sdk.network.dto.TouchpointDto
@@ -18,6 +18,8 @@ internal class HelloCustomerApiImpl(
     private val logger: Logger
 ) : HelloCustomerApi {
 
+    private val apiErrorParser = ApiErrorParser()
+
     override fun getQuestions(builder: UrlBuilder): Result<Collection<TouchpointDto>> =
         callGet(builder, touchpointAdapter)
 
@@ -28,9 +30,7 @@ internal class HelloCustomerApiImpl(
         return when {
             isSuccess -> this
             isFailure -> Result.failure(
-                exception = HelloCustomerSdkException(
-                    throwable = requireNotNull(this.exceptionOrNull())
-                )
+                exception = requireNotNull(this.exceptionOrNull())
             )
             else -> throw IllegalStateException("Illegal state of the internal API. Result couldn't be success and failure simultaneously or neither of them.")
         }
@@ -78,21 +78,34 @@ internal class HelloCustomerApiImpl(
 
         return if (result.isSuccess) {
             val response = result.getOrThrow()
-            if (response.status > 299) {
-                Result.failure(
-                    HelloCustomerHttpException(
-                        requestMethod = response.requestMethod,
-                        uri = response.uri.toString(),
-                        code = response.status,
-                        content = response.content
+            when {
+                response.status == 401 -> Result.failure(UnauthorizedException())
+                response.status > 299 -> {
+                    Result.failure(
+                        HelloCustomerHttpException(
+                            requestMethod = response.requestMethod,
+                            uri = response.uri.toString(),
+                            code = response.status,
+                            content = response.content
+                        )
                     )
-                )
-            } else result
+                }
+                else -> result
+            }
         } else result.mapError()
     }
 
-    private fun <T : Any> JsonAdapter<T>.requireFromJson(content: String): T = requireNotNull(this.fromJson(content)) {
-        "Required a not-null DTO from JSON mapping."
+    private fun <T : Any> JsonAdapter<T>.requireFromJson(content: String): T {
+        return runCatching {
+            requireNotNull(this.fromJson(content)) {
+                "Required a not-null DTO from JSON mapping."
+            }
+        }.onFailure { error ->
+            apiErrorParser.parse(content)?.let { sdkException ->
+                throw sdkException
+            }
+            throw error
+        }.getOrThrow()
     }
 
     private fun logD(message: String) {

@@ -2,13 +2,14 @@ package com.hellocustomer.sdk.evaluation
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Parcelable
 import androidx.annotation.ColorInt
+import androidx.core.widget.TextViewCompat
 import com.hellocustomer.sdk.R
 import com.hellocustomer.sdk.network.dto.QuestionTypeDto
 import com.hellocustomer.sdk.utility.getCompatColor
 import kotlinx.parcelize.Parcelize
-import androidx.core.widget.TextViewCompat
 
 
 @Parcelize
@@ -91,7 +92,11 @@ internal data class EvaluationButtonBuilder(
             this.evaluation = evaluation
             @ColorInt val backgroundColor: Int? = if (useColorScale) scaleButtonColor else buttonBackgroundColor
             backgroundColor?.let { this.backgroundTintList = ColorStateList.valueOf(it) }
-            buttonTextColor?.let(this::setTextColor)
+            if (useColorScale){
+                setTextColor(Color.WHITE)
+            } else {
+                buttonTextColor?.let(this::setTextColor)
+            }
             if (useCustomLabels) {
                 TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
                     this,

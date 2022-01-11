@@ -1,12 +1,25 @@
 package com.hellocustomer.sdk.exception
 
-public open class HelloCustomerSdkException : RuntimeException {
+import com.hellocustomer.sdk.network.CampaignIsOutOfProductionApiError
+import java.util.Locale
 
-    internal constructor() : super()
 
-    internal constructor(message: String) : super(message)
+public sealed class HelloCustomerSdkException(message: String) : RuntimeException(message)
 
-    internal constructor(message: String, throwable: Throwable) : super(message, throwable)
+public data class HelloCustomerHttpException internal constructor(
+    public val requestMethod: String,
+    public val uri: String,
+    public val code: Int,
+    public val content: String
+) : HelloCustomerSdkException("Exception was thrown during http request")
 
-    internal constructor(throwable: Throwable) : super(throwable)
-}
+public class DefaultTranslationNotFoundException internal constructor(locale: Locale)
+    : HelloCustomerSdkException("Cannot find default translation for $locale locale")
+
+public class TouchpointCampaignIsNotMobileTypeException: HelloCustomerSdkException("Provided campaign is not mobile type")
+
+public class ApiErrorMessageException(message: String): HelloCustomerSdkException(message)
+
+public class CampaignIsOutOfProductionException(): HelloCustomerSdkException(CampaignIsOutOfProductionApiError)
+
+public class UnauthorizedException: HelloCustomerSdkException("Unauthorized")

@@ -9,6 +9,7 @@ internal data class TouchpointDto(
     @Json(name = "campaign_UniqueID") val campaignUniqueID: String,
     @Json(name = "hasbeenArchived") val hasBeenArchived: Boolean,
     @Json(name = "sortOrder") val sortOrder: Long,
+    @Json(name = "campaign_CampaignType_ID") val campaignType: Int?,
     @Json(name = "items") val questions: List<QuestionDto>,
     @Json(name = "uniqueID") val uniqueID: String
 ) {

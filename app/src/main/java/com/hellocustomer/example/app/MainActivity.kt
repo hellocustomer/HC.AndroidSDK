@@ -1,16 +1,16 @@
 package com.hellocustomer.example.app
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.hellocustomer.example.BuildConfig
 import com.hellocustomer.example.R
 import com.hellocustomer.example.databinding.ActivityMainBinding
+import com.hellocustomer.sdk.HelloCustomerSdk
 import com.hellocustomer.sdk.HelloCustomerTouchpointConfig
 import com.hellocustomer.sdk.dialog.HelloCustomerDialog
 import com.hellocustomer.sdk.font.FontBuilder
-import com.hellocustomer.sdk.loadTouchpoint
 import java.util.UUID
 
 typealias ActivityBindingInflater<Binding> = (layoutInflater: LayoutInflater) -> Binding
@@ -41,18 +41,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadTc1() {
-        loadTouchpoint(
+        HelloCustomerSdk.loadTouchpoint(
+            context = this,
             config = HelloCustomerTouchpointConfig(
                 authorizationToken = BuildConfig.HcAuthToken,
                 companyId = UUID.fromString(BuildConfig.HcCompanyId),
                 touchpointId = UUID.fromString(BuildConfig.HcTouchpoint1Id),
             ),
-            onSuccess = ::handleSuccess
+            onSuccess = ::handleSuccess,
+            onError = ::handleError
         )
     }
 
     private fun loadTc2() {
-        loadTouchpoint(
+        HelloCustomerSdk.loadTouchpoint(
             context = this,
             config = HelloCustomerTouchpointConfig(
                 authorizationToken = BuildConfig.HcAuthToken,
@@ -70,21 +72,32 @@ class MainActivity : AppCompatActivity() {
             onSuccess = { helloCustomerDialog: HelloCustomerDialog ->
                 helloCustomerDialog.show(supportFragmentManager)
             },
-            onError = { throwable: Throwable ->
-                Log.e("ERROR", "An error occurred.", throwable)
-            }
+            onError = ::handleError
         )
     }
 
     private fun loadTc3() {
-        loadTouchpoint(
+        HelloCustomerSdk.loadTouchpoint(
+            context = this,
             config = HelloCustomerTouchpointConfig(
                 authorizationToken = BuildConfig.HcAuthToken,
                 companyId = UUID.fromString(BuildConfig.HcCompanyId),
                 touchpointId = UUID.fromString(BuildConfig.HcTouchpoint3Id),
             ),
-            onSuccess = ::handleSuccess
+            onSuccess = ::handleSuccess,
+            onError = ::handleError
         )
+    }
+
+    private fun handleError(error: Throwable){
+        AlertDialog
+            .Builder(this)
+            .setMessage(error.message)
+            .setTitle("Error occurred")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
     }
 
     private fun handleSuccess(dialog: HelloCustomerDialog) {
