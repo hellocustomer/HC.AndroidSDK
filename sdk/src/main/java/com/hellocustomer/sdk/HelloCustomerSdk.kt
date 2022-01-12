@@ -4,26 +4,16 @@ package com.hellocustomer.sdk
 
 import android.content.Context
 import android.os.Handler
-import android.os.Looper
-import androidx.core.os.HandlerCompat
+import com.hellocustomer.sdk.Instances.DefaultExecutorService
+import com.hellocustomer.sdk.Instances.DefaultMainThreadHandler
+import com.hellocustomer.sdk.Instances.SdkConfig
 import com.hellocustomer.sdk.dialog.HelloCustomerDialog
-import com.hellocustomer.sdk.logger.DefaultLogger
-import com.hellocustomer.sdk.network.HelloCustomerApi
-import com.hellocustomer.sdk.network.HelloCustomerApiImpl
-import com.hellocustomer.sdk.network.adapter.DialogTypeDtoJsonAdapter
-import com.hellocustomer.sdk.network.dto.LanguageDesignDto
-import com.hellocustomer.sdk.network.dto.QuestionTypeDto
-import com.hellocustomer.sdk.network.dto.TouchpointDto
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import com.squareup.moshi.adapters.EnumJsonAdapter
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-
-//region Public API
 
 public object HelloCustomerSdk {
+
+    public var loggingEnabled: Boolean = false
+
     /**
      *  Request loading touchpoint in any place and show when you want
      *  by calling [show][com.hellocustomer.sdk.dialog.HelloCustomerDialog] method in [onSuccess] callback.
@@ -79,71 +69,31 @@ public object HelloCustomerSdk {
             mainThreadHandler = mainThreadHandler
         ).checkIfTouchpointIsActive(
             context = context,
-            sdkConfig = SdkConfig,
+            sdkConfig = Instances.SdkConfig,
             touchpointConfig = config,
             onError = onError,
             onSuccess = onSuccess
         )
     }
+
+    private fun loadTouchpoint(
+        context: Context,
+        touchpointConfig: HelloCustomerTouchpointConfig,
+        sdkConfig: SdkConfiguration,
+        onError: (Throwable) -> Unit,
+        onSuccess: (HelloCustomerDialog) -> Unit,
+        executorService: ExecutorService,
+        mainThreadHandler: Handler,
+    ) {
+        HelloCustomerService(
+            executorService = executorService,
+            mainThreadHandler = mainThreadHandler
+        ).load(
+            context = context,
+            sdkConfig = sdkConfig,
+            touchpointConfig = touchpointConfig,
+            onError = onError,
+            onSuccess = onSuccess
+        )
+    }
 }
-
-
-
-//endregion
-
-//region Internal API
-
-internal val DefaultExecutorService: ExecutorService by lazy {
-    Executors.newSingleThreadExecutor()
-}
-internal val DefaultMainThreadHandler: Handler by lazy {
-    HandlerCompat.createAsync(Looper.getMainLooper())
-}
-internal val SdkConfig: SdkConfiguration = HelloCustomerSdkConfig(
-    baseApiUrl = "api.hellocustomer.com",
-    baseOpinionsUrl = "opinions.hellocustomer.com",
-    baseApiScheme = "https",
-    apiVersion = "V2.0"
-)
-internal val MoshiInstance: Moshi = Moshi.Builder()
-    .add(DialogTypeDtoJsonAdapter())
-    .add(
-        QuestionTypeDto::class.java,
-        EnumJsonAdapter.create(QuestionTypeDto::class.java)
-            .withUnknownFallback(QuestionTypeDto.UNKNOWN)
-    )
-    .addLast(KotlinJsonAdapterFactory())
-    .build()
-internal val SdkLogger = DefaultLogger(tag = "HELLO_CUSTOMER")
-internal val SdkApi: HelloCustomerApi = HelloCustomerApiImpl(
-    touchpointAdapter = Types.newParameterizedType(List::class.java, TouchpointDto::class.java).let { type ->
-        MoshiInstance.adapter(type)
-    },
-    designAdapter = Types.newParameterizedType(List::class.java, LanguageDesignDto::class.java).let { type ->
-        MoshiInstance.adapter(type)
-    },
-    logger = DefaultLogger(tag = "HELLO_CUSTOMER_HTTP")
-)
-
-private fun loadTouchpoint(
-    context: Context,
-    touchpointConfig: HelloCustomerTouchpointConfig,
-    sdkConfig: SdkConfiguration,
-    onError: (Throwable) -> Unit,
-    onSuccess: (HelloCustomerDialog) -> Unit,
-    executorService: ExecutorService,
-    mainThreadHandler: Handler,
-) {
-    HelloCustomerService(
-        executorService = executorService,
-        mainThreadHandler = mainThreadHandler
-    ).load(
-        context = context,
-        sdkConfig = sdkConfig,
-        touchpointConfig = touchpointConfig,
-        onError = onError,
-        onSuccess = onSuccess
-    )
-}
-
-//endregion

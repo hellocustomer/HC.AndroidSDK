@@ -8,8 +8,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.hellocustomer.sdk.Instances.SdkLogger
 import com.hellocustomer.sdk.R
-import com.hellocustomer.sdk.SdkLogger
 import com.hellocustomer.sdk.databinding.FragmentHelloCustomerBottomSheetBinding
 import com.hellocustomer.sdk.survey.WebViewActivity
 

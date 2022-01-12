@@ -1,6 +1,6 @@
 package com.hellocustomer.sdk.network
 
-import com.hellocustomer.sdk.MoshiInstance
+import com.hellocustomer.sdk.Instances.MoshiInstance
 import com.hellocustomer.sdk.exception.ApiErrorMessageException
 import com.hellocustomer.sdk.exception.CampaignIsOutOfProductionException
 import com.hellocustomer.sdk.exception.HelloCustomerSdkException

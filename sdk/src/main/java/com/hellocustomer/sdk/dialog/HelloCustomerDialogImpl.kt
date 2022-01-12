@@ -7,12 +7,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import com.hellocustomer.sdk.Instances.SdkLogger
 import com.hellocustomer.sdk.R
-import com.hellocustomer.sdk.SdkLogger
 import com.hellocustomer.sdk.databinding.FragmentHelloCustomerDialogBinding
 import com.hellocustomer.sdk.survey.WebViewActivity
 

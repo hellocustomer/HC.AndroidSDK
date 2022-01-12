@@ -22,12 +22,13 @@ android {
         buildConfigField "String", "HcCompanyId", "\"" + props.getProperty("HcCompanyId") + "\""
         buildConfigField "String", "HcTouchpoint1Id", "\"" + props.getProperty("HcTouchpoint1Id") + "\""
         buildConfigField "String", "HcTouchpoint2Id", "\"" + props.getProperty("HcTouchpoint2Id") + "\""
-        buildConfigField "String", "HcTouchpoint3Id", "\"" + props.getProperty("HcTouchpoint3Id") + "\""
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

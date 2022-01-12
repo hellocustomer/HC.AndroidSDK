@@ -13,6 +13,7 @@ import com.hellocustomer.sdk.exception.DefaultTranslationNotFoundException
 import com.hellocustomer.sdk.exception.TouchpointCampaignIsNotMobileTypeException
 import com.hellocustomer.sdk.locale.UserLocaleProviderImpl
 import com.hellocustomer.sdk.mapper.TouchpointMapper
+import com.hellocustomer.sdk.network.HelloCustomerApi
 import com.hellocustomer.sdk.network.LanguageDesignUrlBuilder
 import com.hellocustomer.sdk.network.QuestionsUrlBuilder
 import com.hellocustomer.sdk.network.dto.QuestionDto
@@ -23,7 +24,8 @@ import java.util.concurrent.ExecutorService
 
 internal class HelloCustomerService(
     private val executorService: ExecutorService,
-    private val mainThreadHandler: Handler
+    private val mainThreadHandler: Handler,
+    private val sdkApi: HelloCustomerApi = Instances.SdkApi
 ) {
 
     fun load(
@@ -53,7 +55,7 @@ internal class HelloCustomerService(
                 authorizationToken = touchpointConfig.authorizationToken
             )
 
-            val dialogResult: Result<HelloCustomerDialog> = SdkApi.getQuestions(questionsUrlBuilder)
+            val dialogResult: Result<HelloCustomerDialog> = sdkApi.getQuestions(questionsUrlBuilder)
                 .mapCatching { touchpoints: Collection<TouchpointDto> ->
                     val touchPoint = touchpoints.first()
                     if (touchPoint.campaignType != null && touchPoint.campaignType != CampaignTypeMobile) {
@@ -67,7 +69,7 @@ internal class HelloCustomerService(
                         authorizationToken = touchpointConfig.authorizationToken
                     )
 
-                    val designDto = SdkApi.getLanguageDesigns(designsUrlBuilder)
+                    val designDto = sdkApi.getLanguageDesigns(designsUrlBuilder)
                         .getOrThrow()
                         .first { it.languageUniqueId == question.languageUniqueId }
 

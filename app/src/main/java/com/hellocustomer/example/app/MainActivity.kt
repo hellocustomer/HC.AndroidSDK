@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupView() {
         requireBinding.button1.setOnClickListener { loadTc1() }
         requireBinding.button2.setOnClickListener { loadTc2() }
-        requireBinding.button3.setOnClickListener { loadTc3() }
+        requireBinding.button3.setOnClickListener { checkIfTouchPoint1IsActive() }
     }
 
     private fun loadTc1() {
@@ -76,15 +76,24 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun loadTc3() {
-        HelloCustomerSdk.loadTouchpoint(
+    private fun checkIfTouchPoint1IsActive() {
+        HelloCustomerSdk.checkIfTouchpointIsActive(
             context = this,
             config = HelloCustomerTouchpointConfig(
                 authorizationToken = BuildConfig.HcAuthToken,
                 companyId = UUID.fromString(BuildConfig.HcCompanyId),
-                touchpointId = UUID.fromString(BuildConfig.HcTouchpoint3Id),
+                touchpointId = UUID.fromString(BuildConfig.HcTouchpoint1Id),
             ),
-            onSuccess = ::handleSuccess,
+            onSuccess = {
+                AlertDialog
+                    .Builder(this)
+                    .setMessage("Touchpoint 1 is active: $it")
+                    .setTitle("Result")
+                    .setPositiveButton("OK") { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .show()
+            },
             onError = ::handleError
         )
     }
