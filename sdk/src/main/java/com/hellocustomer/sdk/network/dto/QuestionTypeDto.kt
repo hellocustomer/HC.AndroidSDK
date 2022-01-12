@@ -5,6 +5,6 @@ import com.squareup.moshi.Json
 internal enum class QuestionTypeDto {
     @Json(name = "CES Score - 1-7 Question") CES,
     @Json(name = "NPS Score - 0-10 Question") NPS,
-    @Json(name = "CSAT Score") CSAT,
+    @Json(name = "CSAT Score - 1-5 Question") CSAT,
     UNKNOWN
 }

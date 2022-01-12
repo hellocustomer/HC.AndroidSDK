@@ -22,12 +22,6 @@ internal data class EvaluationButtonBuilder(
     @ColorInt private val buttonTextColor: Int?
 ) : Parcelable {
 
-    init {
-        check(questionTypeDto != QuestionTypeDto.UNKNOWN) {
-            "Question type is unknown."
-        }
-    }
-
     fun build(context: Context): Array<EvaluationButtonView> = when (questionTypeDto) {
         QuestionTypeDto.NPS -> Array(11) { scoreValue ->
             createButton(
