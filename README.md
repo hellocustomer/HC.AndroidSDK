@@ -32,7 +32,7 @@ the dialog on success.
 ```Kotlin
 import com.hellocustomer.sdk.HelloCustomerTouchpointConfig
 import com.hellocustomer.sdk.font.FontBuilder
-import com.hellocustomer.sdk.loadTouchpoint
+import com.hellocustomer.sdk.HelloCustomerSdk
 
 // imports...
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        loadTouchpoint(
+        HelloCustomerSdk.loadTouchpoint(
             context = this, // for this example the context is provided in the Activity but it isn't necessary
             config = HelloCustomerTouchpointConfig(
                 authorizationToken = "<YOUR AUTHORIZATION HEADER HERE>",
