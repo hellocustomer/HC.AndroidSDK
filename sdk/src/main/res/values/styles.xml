@@ -17,6 +17,7 @@
 
     <style name="Widget.HelloCustomer.Design.BottomSheet.Modal" parent="Widget.Design.BottomSheet.Modal">
         <item name="behavior_peekHeight">512dp</item>
+        <item name="android:background">@drawable/dialog_rounded_bg</item>
     </style>
 
     <!-- endregion -->
