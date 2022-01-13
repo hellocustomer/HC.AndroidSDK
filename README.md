@@ -6,6 +6,11 @@ HelloCustomer touchpoint SDK for Android platform.
 
 Minimum Android SDK 21
 
+### Touchpoint settings requirement
+
+- Touchpoint must be of type InApp
+- Touchpoint must be in production 
+
 ### Installation
 
 You will need to add the jitpack.io repository:
